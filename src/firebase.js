@@ -1,9 +1,7 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase } from "firebase/database";
+// firebase.js
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database'; 
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCM35M8GxzdPaIYIuIKTsY2ZbPBX4Wa4Cg",
   authDomain: "mathgame-db6c5.firebaseapp.com",
@@ -15,9 +13,7 @@ const firebaseConfig = {
   measurementId: "G-R4X6DF60LZ"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const analytics = getAnalytics(app);
+const db = getDatabase(app); 
 
 export { db };
