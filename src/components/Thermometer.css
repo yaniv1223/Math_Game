@@ -1,0 +1,196 @@
+.thermometer-container {
+  margin: 20px auto;
+  text-align: center;
+  max-width: 900px;
+}
+
+.thermometer-bg-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.thermometer-bg {
+  width: 100%;
+  height: auto;
+  display: block;
+ /* opacity: 0.5;  fades the background */
+}
+
+.scale-overlay {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 40px;
+  pointer-events: none;
+}
+
+.tick-horizontal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+  flex: 1;
+}
+
+.marker-horizontal {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ccc;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.tick-horizontal.active .marker-horizontal {
+  background: orange;
+  transform: scale(1.5);
+}
+
+.label-horizontal {
+  font-size: 11px;
+  font-weight: bold;
+  color: #000; /* darker color */
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7); /* glow effect for contrast */
+}
+
+.selected-value {
+  font-size: 18px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.thermometer-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  outline: none;
+  pointer-events: auto;
+  z-index: 2;
+}
+.thermometer-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: orange;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px #aaa;
+  transition: background 0.3s;
+}
+.thermometer-slider:disabled::-webkit-slider-thumb {
+  background: #ccc;
+}
+.thermometer-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: orange;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px #aaa;
+  transition: background 0.3s;
+}
+.thermometer-slider:disabled::-moz-range-thumb {
+  background: #ccc;
+}
+.thermometer-slider::-ms-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: orange;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px #aaa;
+  transition: background 0.3s;
+}
+.thermometer-slider:disabled::-ms-thumb {
+  background: #ccc;
+}
+.thermometer-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+}
+.thermometer-slider::-ms-fill-lower,
+.thermometer-slider::-ms-fill-upper {
+  background: #eee;
+  border-radius: 3px;
+}
+.thermometer-slider:focus {
+  outline: none;
+}
+.thermometer-slider::-moz-range-track {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+}
+.thermometer-slider::-ms-tooltip {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .thermometer-container {
+    padding: 0 5px;
+    max-width: 100vw;
+  }
+
+  .thermometer-bg-wrapper {
+    max-width: 98vw;
+  }
+
+  .scale-overlay {
+    height: 28px;
+  }
+
+  .marker-horizontal {
+    width: 10px;
+    height: 10px;
+  }
+
+  .label-horizontal {
+    font-size: 9px;
+  }
+
+  .selected-value {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 400px) {
+  .thermometer-container {
+    padding: 0 2px;
+    max-width: 100vw;
+  }
+
+  .thermometer-bg-wrapper {
+    max-width: 99vw;
+  }
+
+  .scale-overlay {
+    height: 18px;
+  }
+
+  .marker-horizontal {
+    width: 7px;
+    height: 7px;
+  }
+
+  .label-horizontal {
+    font-size: 7px;
+  }
+
+  .selected-value {
+    font-size: 11px;
+  }
+}
