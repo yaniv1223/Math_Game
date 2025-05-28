@@ -1,4 +1,4 @@
-// GameLobby.jsx
+/ GameLobby.jsx
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, update, set } from 'firebase/database';
 import { db } from '../firebase';
@@ -91,6 +91,7 @@ const GameLobby = () => {
     if (answers[playerName] !== undefined) return;
 
     if (userAnswer === correctAnswer) {
+      // Player answered correctly - give point and mark as winner
       update(ref(db, 'rooms/' + roomCode), {
         [`players/${playerName}/score`]: (gameState.players[playerName]?.score || 0) + 1,
         [`answers/${playerName}`]: userAnswer,
@@ -98,17 +99,19 @@ const GameLobby = () => {
         winner: playerName
       });
     } else {
+      // Player answered incorrectly - just record the answer
       const updatedAnswers = { ...answers, [playerName]: userAnswer };
       update(ref(db, 'rooms/' + roomCode), {
-        answers: updatedAnswers
+        [`answers/${playerName}`]: userAnswer
       });
 
+      // Check if all players have answered
       const playerCount = Object.keys(gameState.players).length;
       const submittedCount = Object.keys(updatedAnswers).length;
       if (submittedCount >= playerCount) {
         update(ref(db, 'rooms/' + roomCode), {
           answered: true,
-          winner: null
+          winner: null // No winner since no one got it right
         });
       }
     }
@@ -116,43 +119,38 @@ const GameLobby = () => {
     setSubmitted(true);
   };
 
+  // Fixed useEffect for handling question progression
   useEffect(() => {
     if (
       mode === 'multi' &&
       gameState &&
       !gameState.gameOver &&
-      gameState.answers
+      gameState.answered
     ) {
       const playerCount = Object.keys(gameState.players).length;
-      const answeredCount = Object.keys(gameState.answers).length;
-
-      if (playerCount === 1 && answeredCount === 1 && gameState.answered) {
+      
+      // Set a timeout to move to next question after showing feedback
+      const timeoutId = setTimeout(() => {
         if (gameState.currentQuestion + 1 >= gameState.questions.length) {
+          // Game is over
           update(ref(db, 'rooms/' + roomCode), { gameOver: true });
         } else {
+          // Move to next question
           update(ref(db, 'rooms/' + roomCode), {
             currentQuestion: gameState.currentQuestion + 1,
             answered: false,
             winner: null,
             answers: {}
           });
+          // Reset local state for new question
+          setSubmitted(false);
+          setUserAnswer(0);
         }
-      }
+      }, 2000); // Show feedback for 2 seconds before moving to next question
 
-      if (playerCount === 2 && answeredCount === 2 && gameState.answered) {
-        if (gameState.currentQuestion + 1 >= gameState.questions.length) {
-          update(ref(db, 'rooms/' + roomCode), { gameOver: true });
-        } else {
-          update(ref(db, 'rooms/' + roomCode), {
-            currentQuestion: gameState.currentQuestion + 1,
-            answered: false,
-            winner: null,
-            answers: {}
-          });
-        }
-      }
+      return () => clearTimeout(timeoutId);
     }
-  }, [gameState, mode, roomCode]);
+  }, [gameState?.answered, gameState?.currentQuestion, mode, roomCode]);
 
   if (!mode) {
     return (
@@ -245,15 +243,13 @@ const GameLobby = () => {
     const [winnerName, winnerData] = sorted[0];
 
     return (
-      <Feedback
-        userAnswer={null}
-        correctAnswer={null}
-        submitted={true}
-        onBackToMain={() => window.location.reload()}
-      >
+      <div>
         <h2>המשחק הסתיים!</h2>
         <h3>המנצח: {winnerName} עם {winnerData.score} נקודות 🎉</h3>
-      </Feedback>
+        <button onClick={() => window.location.reload()}>
+          חזור למסך הראשי
+        </button>
+      </div>
     );
   }
 
