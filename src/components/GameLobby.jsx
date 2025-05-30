@@ -1,4 +1,4 @@
-/ GameLobby.jsx
+
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, update, set } from 'firebase/database';
 import { db } from '../firebase';
